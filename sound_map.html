@@ -104,7 +104,7 @@ var map;
 var cancel = true;
 //var scale = ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G#4', 'A4'];
 //var scale = ['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B#3', 'C3'];
- // "C", "D♯"/E♭, F, F♯/G♭, G, B♭
+
 //var scale =  ["C3", "D#3", "F3", "F#3", "G3", "A#3"];
 // var scale =  ["C2", "D#2", "F2", "F#2", "G2", "A#2","C3", "D#3", "F3", "F#3", "G3", "A#3"];
 // var scale =  ["C2", "D#2", "F2", "F#2", "G2", "A#2","C3", "D#3", "F3", "F#3", "G3", "A#3","C4", "D#4", "F4", "F#4", "G4", "A#4"];
@@ -158,9 +158,7 @@ function initialize() {
   var lng = randomInt(-180,180);
   var mapProp = {
     center:new google.maps.LatLng(lat, lng),
-    //center:new google.maps.LatLng(20,42.220850),
     zoom:4,
-
     mapTypeId:google.maps.MapTypeId.SATELLITE
     //mapTypeId:google.maps.MapTypeId.TERRAIN
     //mapTypeId:google.maps.MapTypeId.ROADMAP
@@ -168,10 +166,9 @@ function initialize() {
   
   map=new google.maps.Map(document.getElementById("map"),mapProp);
   map.mapTypes.set(customMapTypeId, customMapType);
-  //map.setMapTypeId(customMapTypeId);
+
 
   resizeMapDiv();
-    //$(window).resize(map.resizeMapDiv);
 
   google.maps.event.addListener(map, 'tilesloaded', function(){
       cancel = false;
@@ -219,7 +216,8 @@ function initialize() {
   <h2>Earth Plays the Blues</h2>
 
 I've been doing quite a lot of experiements in manipulating maps. After quite a bit of trial and error I finally settled for the following process (settled being the operative word): <br><br>I wait for all the map tiles to be loaded in (trick here is to use 'tilesloaded' map event), then take a snapshop of the div using the <a href="http://html2canvas.hertzen.com/">html2canvas</a> library. It's a bit slow as the images need to be saved to the server, but it works. I then pass that snapshot as an image into the canvas, analyize the pixels and then am able to manipulate them as I like. Still a bit buggy when titles don't load properly. So be it.<br><br>
-More canvas experiemnts <a href="./">here</a>
+Here RGB values are mapped chords and brightness effects notes length and duration to create a songscape. 
+
 
 </div>
 
@@ -328,15 +326,7 @@ function getColours(){
           var r = (sourceBuffer32[pos] >> 0) & 0xff; 
           var hsl = rgbToHsl(r,g,b);
           bright[j] = brightness(r,g,b);
-          //col[j] = hsl;
-          //console.log(hsl[0])
-          // col[j]["r"] = r;
-          // col[j]["g"] = g;
-          // col[j]["b"] = b;
           col[j] =  [r,g,b];
-          //col[j] =  [Math.floor(hsl[0]*100),Math.floor(hsl[1]*100),Math.floor(hsl[2]*100)];
-          //col[j] = rgb(r,g,b);
-          console.log(hsl[0]*100);
           j++;
 
         }
@@ -367,15 +357,10 @@ var pos = [];
           var block_colour = rgb(col[0][j][0],col[0][j][1],col[0][j][2]);
 
           ctx.fillStyle = block_colour;
-
           ctx.fillRect(x,y, blocksize, blocksize);
-          //var num = ;
-          //song[j] = notes[col[1][j]];
           song[j] = notes[col[0][j][0]];
           pos[j] = [x,y];
-          //console.log(note);
-          //synth.triggerAttack(note);
-          //synth.triggerAttackRelease(note, col[1][j]);
+
           j++;
 
         }
@@ -394,13 +379,8 @@ function playSong(){
     var r = notes[col[0][timer_counter][0]];
     var g = notes[col[0][timer_counter][1]];
     var b = notes[col[0][timer_counter][2]];
-    //synth.triggerAttackRelease(song[timer_counter], col[1][timer_counter]/10);
     synth.triggerAttackRelease([r, g, b], col[1][timer_counter]/30);
 
-    console.log(r + " " + g + " " + b);
-  //synth.triggerAttackRelease("C4", "8n");
-  //synth.triggerAttack(song[timer_counter], "8n");
-  //synth.triggerAttackRelease(song[timer_counter], "8n");
   
   if (timer_counter >= song.length-1) 
     {
@@ -411,7 +391,7 @@ function playSong(){
       $("#c").fadeOut();
       map.setCenter(new google.maps.LatLng(lat,lng));
     }
-  //ctx2.clearRect(0,0, width, height);
+
   ctx2.fillStyle = rgba(255,0,0,0.5);
   ctx2.fillRect(pos[timer_counter][0],pos[timer_counter][1], blocksize, blocksize);
   timer_counter ++;
@@ -423,8 +403,6 @@ function playSong(){
 }
 
 }
-
-
 
 </script>
  
